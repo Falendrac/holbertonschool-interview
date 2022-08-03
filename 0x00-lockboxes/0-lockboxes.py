@@ -5,28 +5,24 @@ Can we unlock the lockboxes ?
 '''
 
 
-def searchKey(boxes, key, boxesOpen):
+def searchKey(boxes):
     '''
     Open all boxes and store all key
     '''
-    allKeys = key
-    for element in key:
-        if (element < len(boxes) and element not in boxesOpen):
-            boxesOpen.append(element)
-            allKeys = allKeys + searchKey(boxes, boxes[element], boxesOpen)
+    boxesOpen = [ boxes[0] ]
 
-    return allKeys
+    for box in boxesOpen:
+        for key in box:
+            if key < len(boxes) and boxes[key] not in boxesOpen:
+                boxesOpen.append(boxes[key])
+
+    return boxesOpen
 
 
 def canUnlockAll(boxes):
     '''
     Determines if all the boxes can be opened.
     '''
-    boxesOpen = [0]
-    listKey = searchKey(boxes, boxes[0], boxesOpen)
+    boxesOpen = searchKey(boxes)
 
-    for idx in range(1, len(boxes)):
-        if (idx not in listKey):
-            return False
-
-    return True
+    return len(boxes) == len(boxesOpen)
