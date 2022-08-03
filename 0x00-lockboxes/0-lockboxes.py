@@ -9,12 +9,12 @@ def searchKey(boxes):
     '''
     Open all boxes and store all key
     '''
-    boxesOpen = [ boxes[0] ]
+    boxesOpen = [0]
 
     for box in boxesOpen:
-        for key in box:
-            if key < len(boxes) and boxes[key] not in boxesOpen:
-                boxesOpen.append(boxes[key])
+        for key in boxes[box]:
+            if key < len(boxes) and key not in boxesOpen:
+                boxesOpen.append(key)
 
     return boxesOpen
 
