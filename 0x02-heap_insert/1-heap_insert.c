@@ -1,5 +1,4 @@
 #include "binary_trees.h"
-#include <stdlib.h>
 
 /**
  * binary_tree_size - binary that measures the size of a binary tree
@@ -31,71 +30,72 @@ size_t binary_tree_size(const heap_t *tree)
  */
 heap_t *getNodeFromIndex(heap_t *root, int index)
 {
-	int parentIndex, direction;
+	int parentIdx, direction;
 
 	if (index == 0)
 		return (root);
 
-	parentIndex = (index - 1) / 2;
+	parentIdx = (index - 1) / 2;
 	direction = (index - 1) % 2;
 
-	return (getNodeFromIndex(direction ? root->right : root->left, parentIndex));
+	return (getNodeFromIndex(direction ? root->right : root->left, parentIdx));
 }
 
 /**
  * swap - Swaps the values of two nodes
  *
- * @src: Pointer to the source node
- * @dest: Pointer to the destination node
+ * @node: Pointer to the source node
+ * Return: The node
  */
-void swap(heap_t *src, heap_t *dest)
+heap_t *swap(heap_t *node)
 {
-	int tmp;
+	int temp = 0;
 
-	tmp = dest->n;
-	dest->n = src->n;
-	src->n = tmp;
-	src = dest;
-	dest = src->parent;
+	if (node->parent && node->n > node->parent->n)
+	{
+		temp = node->parent->n;
+		node->parent->n = node->n;
+		node->n = temp;
+		return (swap(node->parent));
+	}
+	return (node);
 }
 
 /**
- * heap_insert - insert a node in the good place
+ * heap_insert - Insert a new node
  *
- * @root: The root of the binary tree
- * @value: Value set in the new node
- * Return: New node or NULL
+ * @root: Pointer to the root node
+ * @value: Value to store in the new node
+ *
+ * Return: Pointer to the new node
  */
 heap_t *heap_insert(heap_t **root, int value)
 {
-	heap_t *new, *parent;
-	int size, index;
+	heap_t *new_node, *parent;
+	int idx, size;
 
 	if (root == NULL)
 		return (NULL);
 
-	new = binary_tree_node(NULL, value);
-	if (new == NULL)
-		return (NULL);
+	new_node = binary_tree_node(NULL, value);
 
 	if (*root == NULL)
 	{
-		*root = new;
-		return (new);
+		*root = new_node;
+		return (new_node);
 	}
 
 	size = binary_tree_size(*root);
-	index = (size - 1) / 2;
-	parent = getNodeFromIndex(*root, index);
-	new->parent = parent;
+	idx = (size - 1) / 2;
+	parent = getNodeFromIndex(*root, idx);
+	new_node->parent = parent;
 
 	if (size % 2 == 0)
-		parent->right = new;
+		parent->right = new_node;
 	else
-		parent->left = new;
+		parent->left = new_node;
 
-	while (parent && parent->n < new->n)
-		swap(new, parent);
+	new_node = swap(new_node);
 
-	return (new);
+	return (new_node);
 }
