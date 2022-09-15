@@ -51,3 +51,4 @@ if __name__ == "__main__":
         display_data()
         raise
     display_data()
+    
