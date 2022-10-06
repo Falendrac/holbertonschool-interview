@@ -43,3 +43,4 @@ def validUTF8(data):
 
     # Check if all bytes were used
     return remaining_byte_count == 0
+    
